@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Authors</title>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('add_author') }}">Add Author</a></li>
+            <li><a href="{{ url_for('add_book') }}">Add Book</a></li>
+            <li><a href="{{ url_for('authors') }}">Authors</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Authors</h1>
+        <div class="card-grid">
+            {% for author in authors %}
+            <div class="card">
+                <h3>{{ author.name }}</h3>
+                {% if author.birth_date %}
+                <p><strong>Birthdate:</strong> {{ author.birth_date }}</p>
+                {% endif %}
+                {% if author.date_of_death %}
+                <p><strong>Date of Death:</strong> {{ author.date_of_death }}</p>
+                {% endif %}
+                <form action="{{ url_for('delete_author', author_id=author.id) }}" method="POST">
+                    <button type="submit" class="btn btn-delete">Delete Author</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>

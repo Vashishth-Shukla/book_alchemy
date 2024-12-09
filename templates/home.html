@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Library Home</title>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('add_author') }}">Add Author</a></li>
+            <li><a href="{{ url_for('add_book') }}">Add Book</a></li>
+            <li><a href="{{ url_for('authors') }}">Authors</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Library Books</h1>
+        <div class="card-grid">
+            {% for book in books %}
+            <div class="card">
+                <h3>{{ book.title }}</h3>
+                <p><strong>Author:</strong> {{ book.author.name }}</p>
+                <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                <p><strong>Published:</strong> {{ book.publication_year }}</p>
+                <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
+                    <button type="submit" class="btn btn-delete">Delete Book</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>
