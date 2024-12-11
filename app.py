@@ -24,12 +24,27 @@ db.init_app(app)
 
 @app.route("/")
 def home():
+    """
+    Render the home page showing the list of all books.
+
+    Returns:
+        Rendered HTML template for the home page with a list of books.
+    """
     books = Book.query.all()
     return render_template("home.html", books=books)
 
 
 @app.route("/add_author", methods=["GET", "POST"])
 def add_author():
+    """
+    Add a new author to the database.
+
+    For GET requests, renders the form for adding an author.
+    For POST requests, processes the form data and adds the author to the database.
+
+    Returns:
+        Redirects to the authors page on success or re-renders the form on failure.
+    """
     if request.method == "POST":
         name = request.form["name"]
         birthdate = request.form.get("birthdate")  # Optional
@@ -66,6 +81,15 @@ def add_author():
 
 @app.route("/add_book", methods=["GET", "POST"])
 def add_book():
+    """
+    Add a new book to the database.
+
+    For GET requests, renders the form for adding a book.
+    For POST requests, processes the form data and adds the book to the database.
+
+    Returns:
+        Redirects to the home page on success or re-renders the form on failure.
+    """
     if request.method == "POST":
         title = request.form["title"]
         isbn = request.form["isbn"]
@@ -102,12 +126,27 @@ def add_book():
 
 @app.route("/authors")
 def authors():
+    """
+    Display the list of authors.
+
+    Returns:
+        Rendered HTML template for the authors page with a list of authors.
+    """
     authors_list = Author.query.all()
     return render_template("authors.html", authors=authors_list)
 
 
 @app.route("/author/<int:author_id>/delete", methods=["POST"])
 def delete_author(author_id):
+    """
+    Delete an author from the database.
+
+    Args:
+        author_id (int): ID of the author to delete.
+
+    Returns:
+        Redirect to the authors page after deletion.
+    """
     author = Author.query.get_or_404(author_id)
     db.session.delete(author)
     db.session.commit()
@@ -117,6 +156,17 @@ def delete_author(author_id):
 
 @app.route("/book/<int:book_id>/delete", methods=["POST"])
 def delete_book(book_id):
+    """
+    Delete a book from the database.
+
+    If the book's author has no other books, the author is also deleted.
+
+    Args:
+        book_id (int): ID of the book to delete.
+
+    Returns:
+        Redirect to the home page after deletion.
+    """
     book = Book.query.get_or_404(book_id)
     author = book.author
     db.session.delete(book)
@@ -131,6 +181,9 @@ def delete_book(book_id):
 
 
 def main():
+    """
+    Initialize the database and run the Flask application.
+    """
     with app.app_context():
         db.create_all()
     app.run(debug=True)
